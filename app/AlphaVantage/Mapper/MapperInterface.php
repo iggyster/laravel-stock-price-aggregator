@@ -24,4 +24,11 @@ interface MapperInterface
     public function mapGlobalQuoteToStock(array $globalQuote): Stock;
 
     public function mapStringToSymbol(string $symbol): Symbol;
+
+    /**
+     * @param Symbol[] $symbols
+     *
+     * @return string[]
+     */
+    public function mapSymbolsToCacheKeys(array $symbols): array;
 }

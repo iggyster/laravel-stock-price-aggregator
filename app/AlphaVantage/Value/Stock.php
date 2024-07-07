@@ -4,6 +4,17 @@ namespace App\AlphaVantage\Value;
 
 final class Stock
 {
+    private const NAME = 'name';
+    private const OPEN = 'open';
+    private const HIGH = 'high';
+    private const LOW = 'low';
+    private const PRICE = 'price';
+    private const VOLUME = 'volume';
+    private const LATEST_TRADING_DAY = 'latestTradingDay';
+    private const PREVIOUS_CLOSE = 'previousClose';
+    private const CHANGE = 'change';
+    private const CHANGE_PERCENT = 'changePercent';
+
     private string $name;
     private string $open;
     private string $high;
@@ -15,19 +26,38 @@ final class Stock
     private string $change;
     private string $changePercent;
 
+    public function __serialize(): array
+    {
+        return $this->toArray();
+    }
+
+    public function __unserialize(array $data): void
+    {
+        $this->name = $data[self::NAME];
+        $this->open = $data[self::OPEN];
+        $this->high = $data[self::HIGH];
+        $this->low = $data[self::LOW];
+        $this->price = $data[self::PRICE];
+        $this->volume = $data[self::VOLUME];
+        $this->latestTradingDay = $data[self::LATEST_TRADING_DAY];
+        $this->previousClose = $data[self::PREVIOUS_CLOSE];
+        $this->change = $data[self::CHANGE];
+        $this->changePercent = $data[self::CHANGE_PERCENT];
+    }
+
     public static function fromArray(array $data): Stock
     {
         return (new Stock())
-            ->setName($data[0])
-            ->setOpen($data[1])
-            ->setHigh($data[2])
-            ->setLow($data[3])
-            ->setPrice($data[4])
-            ->setVolume($data[5])
-            ->setLatestTradingDay($data[6])
-            ->setPreviousClose($data[7])
-            ->setChange($data[8])
-            ->setChangePercent($data[9]);
+            ->setName($data[self::NAME])
+            ->setOpen($data[self::OPEN])
+            ->setHigh($data[self::HIGH])
+            ->setLow($data[self::LOW])
+            ->setPrice($data[self::PRICE])
+            ->setVolume($data[self::VOLUME])
+            ->setLatestTradingDay($data[self::LATEST_TRADING_DAY])
+            ->setPreviousClose($data[self::PREVIOUS_CLOSE])
+            ->setChange($data[self::CHANGE])
+            ->setChangePercent($data[self::CHANGE_PERCENT]);
     }
 
     public function getName(): string
@@ -153,16 +183,16 @@ final class Stock
     public function toArray(): array
     {
         return [
-            $this->getName(),
-            $this->getOpen(),
-            $this->getHigh(),
-            $this->getLow(),
-            $this->getPrice(),
-            $this->getVolume(),
-            $this->getLatestTradingDay(),
-            $this->getPreviousClose(),
-            $this->getChange(),
-            $this->getChangePercent(),
+            self::NAME => $this->getName(),
+            self::OPEN => $this->getOpen(),
+            self::HIGH => $this->getHigh(),
+            self::LOW => $this->getLow(),
+            self::PRICE => $this->getPrice(),
+            self::VOLUME => $this->getVolume(),
+            self::LATEST_TRADING_DAY => $this->getLatestTradingDay(),
+            self::PREVIOUS_CLOSE => $this->getPreviousClose(),
+            self::CHANGE => $this->getChange(),
+            self::CHANGE_PERCENT => $this->getChangePercent(),
         ];
     }
 }

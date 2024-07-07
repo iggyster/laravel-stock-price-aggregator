@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\AlphaVantage\Mapper;
 
 use App\AlphaVantage\Value\GlobalQuote;
@@ -28,5 +30,10 @@ class Mapper implements MapperInterface
     public function mapStringToSymbol(string $symbol): Symbol
     {
         return (new Symbol())->setName($symbol);
+    }
+
+    public function mapSymbolsToCacheKeys(array $symbols): array
+    {
+        return \array_map(fn(Symbol $symbol) => $symbol->getName(), $symbols);
     }
 }

@@ -20,6 +20,8 @@ readonly class StockService implements StockServiceInterface
     {
         $globalQuote = $this->client->fetchGlobalQuote($symbol->getName());
 
+        // TODO: Fix the next line from failing by solving a rate limiting issue for 25 req/day
+
         return $this->mapper->mapGlobalQuoteToStock($globalQuote[GlobalQuote::KEY]);
     }
 

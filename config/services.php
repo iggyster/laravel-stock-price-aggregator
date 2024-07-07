@@ -40,6 +40,8 @@ return [
     AlphaVantage::NAME => [
         AlphaVantage::URL => 'https://www.alphavantage.co/',
         AlphaVantage::API_KEY => env('ALPHA_VANTAGE_API_KEY'),
+        AlphaVantage::SYMBOLS => ['VTI', 'VWO', 'VGLT', 'VEA', 'AGG', 'IBTG', 'AAPL', 'NFLX', 'GOOGL', 'EPAM'],
+        AlphaVantage::CACHE_TTL => 1,
     ],
 
 ];
