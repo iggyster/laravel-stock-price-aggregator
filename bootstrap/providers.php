@@ -1,5 +1,7 @@
 <?php
 
+use App\Providers\AlphaVantageServiceProvider;
+
 return [
-    App\Providers\AppServiceProvider::class,
+    AlphaVantageServiceProvider::class,
 ];
