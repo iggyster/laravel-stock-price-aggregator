@@ -1,5 +1,7 @@
 <?php
 
+use App\AlphaVantage\ConfigInterface as AlphaVantage;
+
 return [
 
     /*
@@ -33,6 +35,11 @@ return [
             'bot_user_oauth_token' => env('SLACK_BOT_USER_OAUTH_TOKEN'),
             'channel' => env('SLACK_BOT_USER_DEFAULT_CHANNEL'),
         ],
+    ],
+
+    AlphaVantage::NAME => [
+        AlphaVantage::URL => 'https://www.alphavantage.co/',
+        AlphaVantage::API_KEY => env('ALPHA_VANTAGE_API_KEY'),
     ],
 
 ];
