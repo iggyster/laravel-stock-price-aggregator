@@ -18,11 +18,6 @@ class Mapper implements MapperInterface
         $stock->setHigh($globalQuote[GlobalQuote::HIGH]);
         $stock->setLow($globalQuote[GlobalQuote::LOW]);
         $stock->setPrice($globalQuote[GlobalQuote::PRICE]);
-        $stock->setVolume($globalQuote[GlobalQuote::VOLUME]);
-        $stock->setLatestTradingDay($globalQuote[GlobalQuote::LATEST_TRADING_DAY]);
-        $stock->setPreviousClose($globalQuote[GlobalQuote::PREVIOUS_CLOSE]);
-        $stock->setChange($globalQuote[GlobalQuote::CHANGE]);
-        $stock->setChangePercent($globalQuote[GlobalQuote::CHANGE_PERCENT]);
 
         return $stock;
     }

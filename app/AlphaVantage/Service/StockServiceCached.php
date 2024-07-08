@@ -3,6 +3,7 @@
 namespace App\AlphaVantage\Service;
 
 use App\AlphaVantage\Cache\CacheInterface;
+use App\AlphaVantage\Exception\AlphaVantageException;
 use App\AlphaVantage\Mapper\MapperInterface;
 use App\AlphaVantage\Value\Stock;
 use App\AlphaVantage\Value\Symbol;
@@ -47,6 +48,9 @@ readonly class StockServiceCached implements StockServiceInterface
         return $cache;
     }
 
+    /**
+     * @throws AlphaVantageException
+     */
     private function cacheStock(Symbol $symbol): Stock
     {
         $stock = $this->stockService->fetchStockDataBySymbol($symbol);

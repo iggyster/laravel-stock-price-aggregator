@@ -2,6 +2,7 @@
 
 namespace App\AlphaVantage\Service;
 
+use App\AlphaVantage\Exception\AlphaVantageException;
 use App\AlphaVantage\Http\Api\CoreStockClientInterface;
 use App\AlphaVantage\Mapper\MapperInterface;
 use App\AlphaVantage\Value\GlobalQuote;
@@ -19,8 +20,9 @@ readonly class StockService implements StockServiceInterface
     public function fetchStockDataBySymbol(Symbol $symbol): Stock
     {
         $globalQuote = $this->client->fetchGlobalQuote($symbol->getName());
-
-        // TODO: Fix the next line from failing by solving a rate limiting issue for 25 req/day
+        if (empty($globalQuote[GlobalQuote::KEY])) {
+            throw new AlphaVantageException('Unable to fetch global quote.');
+        }
 
         return $this->mapper->mapGlobalQuoteToStock($globalQuote[GlobalQuote::KEY]);
     }
