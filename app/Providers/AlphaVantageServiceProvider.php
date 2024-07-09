@@ -49,7 +49,7 @@ class AlphaVantageServiceProvider extends ServiceProvider
             )
         );
         $this->app->extend(
-            StockService::class,
+            StockServiceInterface::class,
             static fn(StockService $service, Application $app) => new StockServiceCached(
                 $service,
                 $app->make(MapperInterface::class),
@@ -58,7 +58,7 @@ class AlphaVantageServiceProvider extends ServiceProvider
         );
         $this->app->singleton(RepositoryInterface::class, AlphaVantageRepository::class);
         $this->app->extend(
-            AlphaVantageRepository::class,
+            RepositoryInterface::class,
             static fn(AlphaVantageRepository $repository, Application $app) => new AlphaVantageRepositoryCached(
                 $repository
             )
