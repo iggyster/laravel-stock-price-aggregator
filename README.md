@@ -12,6 +12,8 @@ stock trends.
 
 ## Installation
 
+!WARNING: Installation was tested only on macOS and based on the information from the official doc.
+
 The application is using [Laravel Sail](https://laravel.com/docs/11.x/sail) for containerisation, so I assume you have Docker installed.
 
 1. Clone the project
@@ -72,4 +74,6 @@ To test implementation follow this steps:
    
 ## Documentation
 
+- [Usage](./docs/usage.md)
+- [Design decisions](./docs/design.md)
 - [Development notes](./docs/dev-notes.md)
