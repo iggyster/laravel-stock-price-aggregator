@@ -54,7 +54,7 @@ class AlphaVantageRepository implements RepositoryInterface
                 'name' => $item->name,
                 'current_price' => $item->current_price,
                 'previous_price' => $item->previous_price,
-                'change' => $item->price_difference * 100 / $item->previous_price,
+                'change' => ($item->price_difference / $item->previous_price) * 100,
             ])
             ->toArray();
     }
