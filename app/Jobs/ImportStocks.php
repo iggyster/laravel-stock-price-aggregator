@@ -35,13 +35,11 @@ final class ImportStocks implements ShouldQueue
 
         try {
             $stocks = $stockService->fetchStockData($symbols);
+
+            $repository->saveStocks($stocks);
         } catch (\Throwable $exception) {
-            report($exception);
-
-            return;
+            logger()->warning($exception->getMessage());
         }
-
-        $repository->saveStocks($stocks);
     }
 
     public function middleware(): array
