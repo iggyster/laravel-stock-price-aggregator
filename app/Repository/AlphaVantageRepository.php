@@ -37,25 +37,26 @@ class AlphaVantageRepository implements RepositoryInterface
 
     public function fetchReports(): array
     {
-        $reports = DB::table(
-            StockModel::selectRaw('
-                    name,
-                    price AS current_price,
-                    LEAD(price, 1) OVER (PARTITION BY name ORDER BY id DESC) AS previous_price,
-                    price - LEAD(price, 1) OVER (PARTITION BY name ORDER BY id DESC) AS price_difference,
-                    ROW_NUMBER() OVER (PARTITION BY name ORDER BY id DESC) AS rn
-                ')
-            )
-            ->where('rn', '=', '1')
-            ->get();
+        $latest = collect($this->fetchLatest())->keyBy('name');
 
-        return $reports
-            ->map(fn($item) => [
-                'name' => $item->name,
-                'current_price' => $item->current_price,
-                'previous_price' => $item->previous_price,
-                'change' => ($item->price_difference / $item->previous_price) * 100,
-            ])
-            ->toArray();
+        $preLatest = StockModel::whereIn(
+            'id',
+            StockModel::query()->selectRaw('max(id)')
+                ->whereNotIn('id', StockModel::query()->selectRaw('max(id)')->groupBy('name'))
+                ->groupBy('name')
+        )->get()->keyBy('name');
+
+        $stocks = collect();
+        foreach ($latest as $name => $stock) {
+            $preLatestPrice = $preLatest->get($name)['price'];
+            $stocks->add([
+                'name' => $name,
+                'latest_price' => $stock['price'],
+                'pre_latest_price' => $preLatestPrice,
+                'difference' => ($stock['price'] - $preLatestPrice) / $preLatestPrice * 100,
+            ]);
+        }
+
+        return $stocks->toArray();
     }
 }
