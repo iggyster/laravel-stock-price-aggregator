@@ -4,7 +4,6 @@ namespace App\Repository;
 
 use App\AlphaVantage\Repository\RepositoryInterface;
 use App\Models\Stock as StockModel;
-use Illuminate\Support\Facades\DB;
 
 class AlphaVantageRepository implements RepositoryInterface
 {

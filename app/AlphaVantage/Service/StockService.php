@@ -11,6 +11,8 @@ use App\AlphaVantage\Value\Symbol;
 
 readonly class StockService implements StockServiceInterface
 {
+    private const string MESSAGE_FAILED_GLOBAL_QUOTE = 'Unable to fetch global quote.';
+
     public function __construct(
         private CoreStockClientInterface $client,
         private MapperInterface $mapper,
@@ -21,7 +23,7 @@ readonly class StockService implements StockServiceInterface
     {
         $globalQuote = $this->client->fetchGlobalQuote($symbol->getName());
         if (empty($globalQuote[GlobalQuote::KEY])) {
-            throw new AlphaVantageException('Unable to fetch global quote.');
+            throw new AlphaVantageException(self::MESSAGE_FAILED_GLOBAL_QUOTE);
         }
 
         return $this->mapper->mapGlobalQuoteToStock($globalQuote[GlobalQuote::KEY]);
