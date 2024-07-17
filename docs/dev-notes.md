@@ -11,7 +11,7 @@
    The main job has been created, but it's not executed automatically each minute.
    Manual approach is used instead.
 
-7. Update RateLimiter
+7. ~~Update RateLimiter~~
 
    Current rate limiter implementation doesn't match API limits (25 request/day).
    It must be updated as a new decorator around AlphaVantage services (not cached one).

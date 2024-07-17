@@ -10,18 +10,19 @@ use App\AlphaVantage\Http\Api\ParametersInterface;
 use App\AlphaVantage\Http\HttpClientInterface;
 use App\AlphaVantage\Mapper\Mapper;
 use App\AlphaVantage\Mapper\MapperInterface;
+use App\AlphaVantage\RateLimiter\RateLimiterInterface;
 use App\AlphaVantage\Repository\RepositoryInterface;
 use App\AlphaVantage\Service\StockService;
 use App\AlphaVantage\Service\StockServiceCached;
 use App\AlphaVantage\Service\StockServiceInterface;
+use App\AlphaVantage\Service\StockServiceRateLimited;
 use App\Cache\AlphaVantageCacheAdapter;
 use App\Http\Client\Adapter\AlphaVantageAdapter;
+use App\Http\Client\RateLimiter\AlphaVantageRateLimiter;
 use App\Repository\AlphaVantageRepository;
 use App\Repository\AlphaVantageRepositoryCached;
-use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
 
 class AlphaVantageServiceProvider extends ServiceProvider
@@ -29,7 +30,6 @@ class AlphaVantageServiceProvider extends ServiceProvider
     public function boot(): void
     {
         $this->createAlphaVantageHttpMacros();
-        $this->createRateLimiter();
     }
 
     public function register(): void
@@ -37,6 +37,7 @@ class AlphaVantageServiceProvider extends ServiceProvider
         $this->app->singleton(HttpClientInterface::class, AlphaVantageAdapter::class);
         $this->app->singleton(MapperInterface::class, Mapper::class);
         $this->app->singleton(CacheInterface::class, AlphaVantageCacheAdapter::class);
+        $this->app->singleton(RateLimiterInterface::class, AlphaVantageRateLimiter::class);
         $this->app->singleton(
             CoreStockClientInterface::class,
             static fn(Application $app) => new CoreStockClient($app->make(AlphaVantageAdapter::class))
@@ -50,7 +51,14 @@ class AlphaVantageServiceProvider extends ServiceProvider
         );
         $this->app->extend(
             StockServiceInterface::class,
-            static fn(StockService $service, Application $app) => new StockServiceCached(
+            static fn(StockService $service, Application $app) => new StockServiceRateLimited(
+                $service,
+                $app->make(RateLimiterInterface::class),
+            )
+        );
+        $this->app->extend(
+            StockServiceInterface::class,
+            static fn(StockServiceRateLimited $service, Application $app) => new StockServiceCached(
                 $service,
                 $app->make(MapperInterface::class),
                 $app->make(CacheInterface::class)
@@ -74,10 +82,5 @@ class AlphaVantageServiceProvider extends ServiceProvider
                     ParametersInterface::API_KEY => config(ConfigInterface::CONFIG_API_KEY)
                 ])
         );
-    }
-
-    private function createRateLimiter(): void
-    {
-        RateLimiter::for('import-stocks', static fn() => Limit::perDay(25));
     }
 }

@@ -42,6 +42,11 @@ return [
         AlphaVantage::API_KEY => env('ALPHA_VANTAGE_API_KEY'),
         AlphaVantage::SYMBOLS => ['VTI', 'VWO', 'VGLT', 'VEA', 'AGG', 'IBTG', 'AAPL', 'NFLX', 'GOOGL', 'EPAM'],
         AlphaVantage::CACHE_TTL => 1,
+        AlphaVantage::RATE_LIMITER => [
+            AlphaVantage::RATE_LIMITER_KEY => 'alpha_vantage:api_rate_limiter',
+            AlphaVantage::RATE_LIMITER_ATTEMPTS => 25,
+            AlphaVantage::RATE_LIMITER_DECAY_RATE => 86400,
+        ]
     ],
 
 ];
