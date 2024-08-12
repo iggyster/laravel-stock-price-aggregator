@@ -1,14 +1,14 @@
 <?php
 
-namespace Tests\Unit\AlphaVantage;
+namespace Tests\Unit\AlphaVantage\Service;
 
 use App\AlphaVantage\Exception\AlphaVantageException;
 use App\AlphaVantage\Http\Api\CoreStockClientInterface;
 use App\AlphaVantage\Mapper\MapperInterface;
 use App\AlphaVantage\Service\StockService;
 use App\AlphaVantage\Value\GlobalQuote;
-use App\AlphaVantage\Value\Symbol;
 use App\AlphaVantage\Value\Stock;
+use App\AlphaVantage\Value\Symbol;
 use Generator;
 use Mockery;
 use Mockery\MockInterface;
@@ -31,7 +31,7 @@ class StockServiceTest extends TestCase
     }
 
     #[Test]
-    #[Group('unit'), Group('AlphaVantage')]
+    #[Group('unit'), Group('AlphaVantage'), Group('Service')]
     #[DataProvider('stockDataProvider')]
     public function fetchesStockDataBySymbolSuccessfully($symbolName, $globalQuote, $expectedStock)
     {
@@ -49,7 +49,7 @@ class StockServiceTest extends TestCase
     }
 
     #[Test]
-    #[Group('unit'), Group('AlphaVantage')]
+    #[Group('unit'), Group('AlphaVantage'), Group('Service')]
     public function throwsExceptionWhenGlobalQuoteIsEmpty()
     {
         $this->expectException(AlphaVantageException::class);
@@ -64,7 +64,7 @@ class StockServiceTest extends TestCase
     }
 
     #[Test]
-    #[Group('unit'), Group('AlphaVantage')]
+    #[Group('unit'), Group('AlphaVantage'), Group('Service')]
     public function throwsExceptionWhenGlobalQuoteKeyIsMissing()
     {
         $this->expectException(AlphaVantageException::class);
